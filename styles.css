@@ -1,0 +1,32 @@
+.parallax-container {
+  min-height: 420px;
+  height: auto;
+}
+.parallax-container .section {
+  width: 100%;
+}
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+  font-size: inherit;
+}
+.tabs .indicator { 
+  background-color: #CDDC39 !important; 
+}
+.tabs .tab a.active {
+  color: #465F2D;
+}
+
+.tabs .tab a:hover {
+  color: #465F2D;
+}
+
+.tabs .tab a {
+  color: #465F2D;
+}
+
+.btn-floating-option {
+  margin-top: -6px !important;
+}
+    

@@ -1,0 +1,78 @@
+<?php
+ include "connection.php";
+
+ //OJO, no pueden existir dos items con el mismo id_cancion
+
+ $mysqli = new mysqli($host, $user, $pw, $db);
+
+ $played_song = htmlspecialchars($_POST['current_playing']);
+ $month = htmlspecialchars($_POST['month']);
+ $minutes = htmlspecialchars($_POST['minutes']);
+ $hour = htmlspecialchars($_POST['hour']);
+ $day= htmlspecialchars($_POST['day']);
+ $date = htmlspecialchars($_POST['date']);
+
+ $cancion = $played_song . '.mp3';
+
+ //$cancion = $played_song;
+ //$cancion = 'Diablita.m3'; //Problema si no encuentra el nombre
+ $chckStr = "SELECT cancion From estadisticas WHERE cancion = '$cancion'";
+ $result = $mysqli ->query($chckStr);
+ $counter = 0;
+ $id = 0;
+ $genre = 'Genero'; //genero por default
+ //Get Genre
+$getGenre = "SELECT genre, id_cancion FROM lista_canciones WHERE cancion = '$cancion'";
+$resultGenre = $mysqli -> query($getGenre);
+if (!$resultGenre ->num_rows == 0){
+  echo "Encontrado En la base de datos";
+while ($fila = $resultGenre -> fetch_assoc() ) {
+  $genre= $fila['genre'];
+  $id = $fila['id_cancion'];}
+  # code...
+}else {
+
+  echo "NO Encontrado En la base de datos";
+
+}
+
+
+//
+
+  if($result->num_rows ==0){
+   echo "NO existe";
+   $counter = 0;
+
+  }else {
+    $sqlCounter = "SELECT counter FROM estadisticas where cancion = '$cancion' ";
+
+    $result1 = $mysqli->query($sqlCounter);
+    while ($row = $result1 -> fetch_assoc()) {
+     $counter = $row['counter'];
+     # code...
+     echo "existe";
+   }
+
+
+  }
+
+$counter = $counter + 1;
+//"UPDATE temperatura_maxima set minimo = '$min', maximo = '$max' WHERE id = 0 ";
+ //$sqlStr = "INSERT INTO estadisticas (id_cancion,cancion,fecha, counter) WHERE cancion = '$cancion' VALUES (1, '$played_song', '$date', $counter)";
+
+ if($result->num_rows ==0){
+   $sqlStr = "INSERT INTO estadisticas (id_cancion, cancion,fecha, counter, genre) VALUES ('$id','$cancion', '$date', '$counter', '$genre')";
+   echo "No existe en estadisticas, creando el nuevo item";
+   $mysqli->query($sqlStr);
+
+
+
+ }else{
+   $sqlStr = "UPDATE estadisticas set cancion = '$cancion', counter = '$counter' where cancion = '$cancion'";
+   echo "Existe en estadisticas, actualizando....";
+   $mysqli->query($sqlStr);
+
+ }
+
+
+ ?>
